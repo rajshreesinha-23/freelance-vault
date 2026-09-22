@@ -192,7 +192,6 @@ refundClient()
 The first version will use testnet assets instead of real money.
 
 ---
-
 ## System Flow
 
 ```mermaid
@@ -207,5 +206,11 @@ flowchart TD
     D --> F[Deposit Payment]
     F --> G[Smart Contract]
 
-    E -->
+    E --> H[Submit Work]
+    H --> G
+
+    G --> I[Client Approval]
+    I --> J[Release Payment]
+
+    G --> K[Refund]
 ```
