@@ -2,9 +2,9 @@
 
 ### Blockchain-Based Freelance Escrow Platform
 
-FreelanceVault is a blockchain-based freelance payment platform where smart contracts securely hold and release payments between clients and freelancers.
+FreelanceVault is a blockchain-based freelance payment platform that uses a smart contract to securely hold and release payments between clients and freelancers.
 
-The project explores how blockchain can reduce reliance on centralized payment intermediaries.
+The main idea is to reduce dependency on traditional payment intermediaries by using blockchain-based escrow.
 
 ---
 
@@ -13,28 +13,51 @@ The project explores how blockchain can reduce reliance on centralized payment i
 ```mermaid
 flowchart LR
     A[Client] --> B[Create Project]
-    B --> C[Deposit Funds]
-    C --> D[Smart Contract Escrow]
+    B --> C[Deposit Payment]
+    C --> D[Blockchain Escrow]
     D --> E[Freelancer]
     E --> F[Submit Work]
-    F --> G[Client Approval]
+    F --> G[Client Reviews Work]
     G --> H[Payment Released]
 ```
 
 ---
 
-## Architecture
+## Basic Architecture
+
+The project is divided into three main parts:
 
 ```mermaid
 flowchart TB
-    Client[Client] --> Frontend[React Frontend]
+    Client[Client] --> Frontend[Web Interface]
     Freelancer[Freelancer] --> Frontend
 
-    Frontend --> Web3[wagmi / viem]
-    Web3 --> Wallet[MetaMask]
-    Wallet --> Contract[FreelanceEscrow.sol]
+    Frontend --> Backend[Node.js Backend]
+    Frontend --> Contract[Solidity Smart Contract]
+
     Contract --> Blockchain[EVM Blockchain]
+    Backend --> Database[MongoDB]
 ```
+
+### Main Components
+
+**Frontend**
+
+* Simple web interface
+* Client and freelancer dashboards
+* Project creation and project tracking
+
+**Backend**
+
+* Node.js and Express
+* Stores project-related information
+* Provides APIs for the frontend
+
+**Blockchain**
+
+* Solidity smart contract
+* Handles escrow payments
+* Controls payment release and refunds
 
 ---
 
@@ -47,8 +70,8 @@ sequenceDiagram
     participant F as Freelancer
 
     C->>S: Create Project
-    C->>S: Deposit Funds
-    S-->>C: Funds Locked
+    C->>S: Deposit Payment
+    S-->>C: Payment Locked
 
     F->>S: Submit Work
     S-->>C: Work Submitted
@@ -78,41 +101,49 @@ stateDiagram-v2
 
 ### Client
 
-- Connect wallet
-- Create project
-- Deposit payment
-- Review submitted work
-- Approve completed work
-- Request refund
+* Create a freelance project
+* Set project payment
+* Deposit payment into escrow
+* View project status
+* Review submitted work
+* Approve completed work
+* Request refund where applicable
 
 ### Freelancer
 
-- Connect wallet
-- View projects
-- View project details
-- Submit completed work
-- Receive payment
+* View available projects
+* View project details
+* Submit completed work
+* Track project status
+* Receive payment after approval
 
 ### Smart Contract
 
-- Project creation
-- Escrow deposits
-- Work submission
-- Payment release
-- Refund handling
+The smart contract will handle the important payment operations:
+
+* Create project
+* Lock payment
+* Submit work
+* Approve work
+* Release payment
+* Refund payment
 
 ---
 
-## Tech Stack
+## Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React, TypeScript, Tailwind CSS |
-| Blockchain | Solidity, Hardhat |
-| Web3 | wagmi, viem |
-| Wallet | MetaMask |
-| Network | EVM Testnet |
-| Backend | Node.js, Express, MongoDB |
+| Layer       | Technology                                 |
+| ----------- | ------------------------------------------ |
+| Frontend    | React, JavaScript/TypeScript, Tailwind CSS |
+| Backend     | Node.js, Express                           |
+| Database    | MongoDB                                    |
+| Blockchain  | Solidity                                   |
+| Development | Hardhat                                    |
+| Network     | EVM Testnet                                |
+
+The project will initially use a simple frontend and backend architecture.
+
+Advanced Web3 libraries will be added later only if required.
 
 ---
 
@@ -120,10 +151,12 @@ stateDiagram-v2
 
 ```text
 freelance-vault/
+│
 ├── frontend/
 │   ├── src/
-│   ├── package.json
-│   └── ...
+│   ├── components/
+│   ├── pages/
+│   └── package.json
 │
 ├── blockchain/
 │   ├── contracts/
@@ -145,7 +178,7 @@ freelance-vault/
 
 ## Smart Contract
 
-The initial smart contract will contain the core escrow functions:
+The main smart contract will contain the core escrow operations:
 
 ```text
 createProject()
@@ -156,138 +189,23 @@ releasePayment()
 refundClient()
 ```
 
-The contract will initially operate using testnet assets.
+The first version will use testnet assets instead of real money.
 
 ---
 
-## Roadmap
+## System Flow
 
 ```mermaid
-flowchart LR
-    A[Solidity Basics] --> B[Escrow Contract]
-    B --> C[Testing]
-    C --> D[Testnet]
-    D --> E[React Frontend]
-    E --> F[Wallet Integration]
-    F --> G[Complete Escrow Flow]
-    G --> H[Backend]
+flowchart TD
+    A[User] --> B[Web Interface]
+
+    B --> C{User Type}
+
+    C -->|Client| D[Create Project]
+    C -->|Freelancer| E[View Project]
+
+    D --> F[Deposit Payment]
+    F --> G[Smart Contract]
+
+    E -->
 ```
-
-### Phase 1 — Blockchain
-
-- [ ] Learn Solidity fundamentals
-- [ ] Set up Hardhat
-- [ ] Build escrow contract
-- [ ] Understand contract state
-
-### Phase 2 — Testing
-
-- [ ] Write smart contract tests
-- [ ] Test deposits
-- [ ] Test payment release
-- [ ] Test refund logic
-- [ ] Test access control
-
-### Phase 3 — Deployment
-
-- [ ] Deploy locally
-- [ ] Deploy to EVM testnet
-- [ ] Interact with the contract
-- [ ] Understand transactions and gas
-
-### Phase 4 — Frontend
-
-- [ ] Build React interface
-- [ ] Create client dashboard
-- [ ] Create freelancer dashboard
-- [ ] Integrate smart contract
-
-### Phase 5 — Web3
-
-- [ ] Connect MetaMask
-- [ ] Configure wagmi
-- [ ] Use viem for contract interaction
-- [ ] Display transaction status
-
-### Phase 6 — Backend
-
-- [ ] Build Node.js API
-- [ ] Add Express
-- [ ] Store project metadata
-- [ ] Add user profiles
-- [ ] Add transaction history
-
----
-
-## Learning Goals
-
-- Solidity and smart contracts
-- Blockchain transactions and gas
-- Wallet integration
-- Web3 development
-- React and blockchain integration
-- Smart contract security
-- Full-stack Web3 development
-
----
-
-## Security
-
-This project is being developed for educational purposes.
-
-The initial version:
-
-- Uses testnet assets
-- Does not handle real money
-- Is not production-ready
-- Requires security auditing before real-world deployment
-
----
-
-## Current Status
-
-```text
-Project Setup          [x]
-Architecture           [x]
-README                 [x]
-
-Solidity Environment   [ ]
-Escrow Contract        [ ]
-Contract Tests         [ ]
-Local Deployment       [ ]
-Testnet Deployment     [ ]
-React Frontend         [ ]
-Wallet Integration     [ ]
-Escrow Interface       [ ]
-Backend                [ ]
-```
-
----
-
-## Future Improvements
-
-```mermaid
-flowchart TB
-    A[FreelanceVault] --> B[Milestone Payments]
-    A --> C[Dispute Resolution]
-    A --> D[Freelancer Reputation]
-    A --> E[AI Contract Analysis]
-    A --> F[Project Risk Analysis]
-```
-
----
-
-## Disclaimer
-
-This project is for educational purposes and will initially use testnet assets only.
-
-It is not intended for real financial transactions.
-
----
-
-## Author
-
-**Rajshree Sinha**
-
-B.Tech CSE  
-Dayananda Sagar University, Bengaluru
